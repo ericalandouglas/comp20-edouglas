@@ -10,7 +10,8 @@
 		{
 			update = document.getElementById("msg").value;
 			date = new Date();
-			message = date.getMonth() + "/" + date.getDay() + "/" + date.getFullYear() + " " 
+			console.log(date.getMonth());
+			message = date.getMonth()+1 + "/" + date.getDate() + "/" + date.getFullYear() + " " 
 					+ date.getHours() + ":" + date.getMinutes() + " - " + update;
 			ulStats = document.getElementById("statuses");
 			if (ulStats == null) {
