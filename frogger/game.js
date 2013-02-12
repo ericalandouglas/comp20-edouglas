@@ -1,4 +1,6 @@
-// Your work goes here...
+// Eric Douglas
+// Comp20 Assignment 2
+// game.js
 
 
 //initialize game constants
