@@ -139,7 +139,7 @@ function start_game () {
 function draw () 
 {
 	canvas = document.getElementById('game');
-	canvas.width = canvas.width;
+	ctx.clearRect(0, 0, 399, 565); // clear the screen
 	if (canvas.getContext) {
 	
 		//2d rendering
