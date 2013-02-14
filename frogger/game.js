@@ -5,17 +5,17 @@
 
 //declare game constants
 
-level = 0;
-lives = 0;
+var level;
+var lives;
 //time is in seconds
-time = 0;
-game_over = false;
-vehicle_speed = 0;
-log_speed = 0;
-score = 0;
-highscore = 0;
-car_yspawns = [0, 0, 0, 0, 0];
-log_yspawns = [0, 0, 0, 0, 0];
+var time;
+var game_over;
+var vehicle_speed;
+var log_speed;
+var score;
+var highscore;
+car_yspawns = new Array;
+log_yspawns = new Array;
 
 //make frogger object
 
@@ -24,19 +24,18 @@ frogger = {
 	xpos : 0,
 	ypos : 0,
 	orientation : "up",
-	ribet : function () {console.log("ribbetttt");}	
 
 };
 
 
 function start_Animation() {
-			start_game();
+			initialize_game();
             //delay = 40; // milliseconds
-            //draw();
-            //setInterval(draw, delay);
+            //redraw_canvas();
+            //setInterval(redraw_canvas, delay);
 }
 
-function start_game () {
+function initialize_game () {
 
 	//initialize game constants
 	level = 1;
@@ -102,6 +101,7 @@ function start_game () {
         //Sprite sheet
         img = new Image();
   		img.onload = function(){
+  		
   			//Title
     		ctx.drawImage(img,0,0,399,53,0,0,399,53);
     		//End platform
@@ -115,7 +115,7 @@ function start_game () {
     		//frog life 2
     		ctx.drawImage(img,10,332,23,25,17,527,18,19);
     		//frog start
-    		ctx.drawImage(img,10,366,23,25,frogger.xpos,frogger.ypos,33,35);
+    		ctx.drawImage(img,10,366,23,25,frogger.xpos,frogger.ypos,30,32);
     		//log
     		ctx.drawImage(img,0,160,190,30,100,log_yspawns[1],190,35);
     		//car 1
@@ -136,10 +136,11 @@ function start_game () {
 
 }
 
-function draw () 
+function redraw_canvas () 
 {
 	canvas = document.getElementById('game');
 	ctx.clearRect(0, 0, 399, 565); // clear the screen
+	
 	if (canvas.getContext) {
 	
 		//2d rendering
