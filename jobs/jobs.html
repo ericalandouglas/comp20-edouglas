@@ -19,7 +19,8 @@
 			c = { 
 				company : parsed[i]['company'],
 				position : parsed[i]['position'],
-				location : parsed[i]['location']
+				location : parsed[i]['location'],
+				description : parsed[i]['description']
 			
 			};
 			
@@ -36,7 +37,7 @@
 			br = document.createElement("br");
 			compP.appendChild(br);
 			
-			ctext = "	Position: " + c.position;
+			ctext = "Position: " + c.position;
 			ctextBox = document.createTextNode(ctext);
 			compP.appendChild(ctextBox);
 			br = document.createElement("br");
@@ -44,7 +45,7 @@
 			br = document.createElement("br");
 			compP.appendChild(br);
 			
-			ctext = "	Location: " + c.location;
+			ctext = "Location: " + c.location;
 			ctextBox = document.createTextNode(ctext);
 			compP.appendChild(ctextBox);
 			br = document.createElement("br");
