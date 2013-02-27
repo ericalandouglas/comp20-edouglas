@@ -17,3 +17,18 @@ body {
     box-shadow: black 0.5em 0.5em 0.3em;
 
 }
+
+#ep {
+
+	margin-left: 15px;
+	width: 550px;
+	font-size: xx-large;
+	font-family: Impact, Charcoal, sans-serif;
+	text-align: center;
+	color: red;
+	background-color: black;
+	border: solid thick silver;
+    border-radius: 1em;
+    box-shadow: black 0.5em 0.5em 0.3em;
+
+}

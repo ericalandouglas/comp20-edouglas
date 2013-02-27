@@ -1,9 +1,13 @@
 Eric Douglas
-Comp 20 Lab 7
-2/14/2013
+Comp 20 Lab 8
+2/27/2013
 
-I have displayed correctly all companies offering positions in the correct format on my html page.
+I use AJAX properly to request a JSON object from another web page. 
+I display correctly all companies offering positions in the correct 
+format on my html page if the JSON object request is successful.
+I display an error message on the screen if the request for the JSON
+object is unsuccessful.
 
-I collaborated with no one on this assignment.
+I received help from Trevor John to complete this lab.
 
 This assignment took me 30 mins to complete.

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>MBTA</title>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<link href="/stylesheets/default.css?1360815234" media="screen" rel="stylesheet" type="text/css" />
+<script src="/javascripts/jquery-1.6.2.min.js?1360815234" type="text/javascript"></script>
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=true"></script>
+<script type="text/javascript">
+	var infowindow = new google.maps.InfoWindow();
+	var map;
+	var redStations = [];
+	var redBranchAshmont = [];
+	var redBranchBraintree = [];
+	var orangeStations = [];
+	var blueStations = [];
+	var markers = [];
+	var myLat;
+	var myLon;
+	var me;
+	var meMarker;
+		
+	function getMyLocation()
+	{
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function(position) {
+				myLat = position.coords.latitude;
+				myLon = position.coords.longitude;
+				jqxhr = $.ajax({
+						type: 'GET',
+						url: "/mapper/find_closest_stations?lat=" + myLat + "&lon=" + myLon,
+						success: function(data) {
+							me = new google.maps.LatLng(myLat, myLon);
+							closestPt = null;
+							contents = "<h2>You are here</h2>";
+							if (jqxhr.status == 200) {
+								closest = JSON.parse(jqxhr.responseText);
+								if (closest.length > 0) {
+									closestPt = new google.maps.LatLng(closest[0]['station']['stop_lat'], closest[0]['station']['stop_lon']);
+									contents += "<p>The closest station to you is <strong>" + closest[0]['station']['stop_name'] + "</strong> which is approximately " + closest[0]['station']['distance'] + " miles away from you.";
+								}
+								else {
+									contents += "<p>There is no MBTA subway station within 5 miles of you.</p>";
+								}
+							}
+							else {
+								contents += "<p>Whoops, something went wrong!  Alas, cannot find closest MBTA subway station to you.</p>";
+							}
+							meMarker = new google.maps.Marker({position: me, title: contents});
+							meMarker.setMap(map);
+							map.setCenter(me, 12);
+							if (closestPt != null) {
+								closestLine = new google.maps.Polyline({
+									path: [me, closestPt],
+									strokeColor: "#000000",
+									strokeOpacity: 0.5,
+									strokeWeight: 15
+								});
+								closestLine.setMap(map);
+							}
+							infowindow.setContent(meMarker.title);
+							infowindow.open(map, meMarker);
+						}
+					});
+			});
+		}
+		else {
+			alert("Geolocation is not supported by your web browser.  What a shame!");
+		}
+	}
+	
+	function init()
+	{
+		// Middle of MBTA map
+		centerMBTA = new google.maps.LatLng(42.330497742, -71.095794678);
+			
+		// Set up map
+		myOptions = {
+			zoom: 11, // The larger the zoom number, the bigger the zoom
+			center: centerMBTA,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		};
+				
+		// Create the map in the "map_canvas" <div>
+		map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+ 
+ 		// Create the markers
+		tico = "images/t_icon.png";
+		railico = "images/rail.png";
+	
+				pt = new google.maps.LatLng(42.395428, -71.142483);
+				markers.push(new google.maps.Marker({position: pt, title: "Alewife Station", icon: tico}));
+					redStations.push(pt);
+				pt = new google.maps.LatLng(42.39674, -71.121815);
+				markers.push(new google.maps.Marker({position: pt, title: "Davis Station", icon: tico}));
+					redStations.push(pt);
+				pt = new google.maps.LatLng(42.3884, -71.119149);
+				markers.push(new google.maps.Marker({position: pt, title: "Porter Square Station", icon: tico}));
+					redStations.push(pt);
+				pt = new google.maps.LatLng(42.373362, -71.118956);
+				markers.push(new google.maps.Marker({position: pt, title: "Harvard Square Station", icon: tico}));
+					redStations.push(pt);
+				pt = new google.maps.LatLng(42.365486, -71.103802);
+				markers.push(new google.maps.Marker({position: pt, title: "Central Square Station", icon: tico}));
+					redStations.push(pt);
+				pt = new google.maps.LatLng(42.36249079, -71.08617653);
+				markers.push(new google.maps.Marker({position: pt, title: "Kendall/MIT Station", icon: tico}));
+					redStations.push(pt);
+				pt = new google.maps.LatLng(42.361166, -71.070628);
+				markers.push(new google.maps.Marker({position: pt, title: "Charles/MGH Station", icon: tico}));
+					redStations.push(pt);
+				pt = new google.maps.LatLng(42.35639457, -71.0624242);
+				markers.push(new google.maps.Marker({position: pt, title: "Park St. Station", icon: tico}));
+					redStations.push(pt);
+				pt = new google.maps.LatLng(42.355518, -71.060225);
+				markers.push(new google.maps.Marker({position: pt, title: "Downtown Crossing Station", icon: tico}));
+					redStations.push(pt);
+				pt = new google.maps.LatLng(42.352271, -71.055242);
+				markers.push(new google.maps.Marker({position: pt, title: "South Station", icon: tico}));
+					redStations.push(pt);
+				pt = new google.maps.LatLng(42.342622, -71.056967);
+				markers.push(new google.maps.Marker({position: pt, title: "Broadway Station", icon: tico}));
+					redStations.push(pt);
+				pt = new google.maps.LatLng(42.330154, -71.057655);
+				markers.push(new google.maps.Marker({position: pt, title: "Andrew Station", icon: tico}));
+					redStations.push(pt);
+				pt = new google.maps.LatLng(42.320685, -71.052391);
+				markers.push(new google.maps.Marker({position: pt, title: "JFK/UMass Station", icon: tico}));
+					redStations.push(pt);
+					redBranchAshmont.push(pt);
+					redBranchBraintree.push(pt);
+				pt = new google.maps.LatLng(42.275275, -71.029583);
+				markers.push(new google.maps.Marker({position: pt, title: "North Quincy Station", icon: tico}));
+					redBranchBraintree.push(pt);
+				pt = new google.maps.LatLng(42.31129, -71.053331);
+				markers.push(new google.maps.Marker({position: pt, title: "Savin Hill Station", icon: tico}));
+					redBranchAshmont.push(pt);
+				pt = new google.maps.LatLng(42.300093, -71.061667);
+				markers.push(new google.maps.Marker({position: pt, title: "Fields Corner Station", icon: tico}));
+					redBranchAshmont.push(pt);
+				pt = new google.maps.LatLng(42.2665139, -71.0203369);
+				markers.push(new google.maps.Marker({position: pt, title: "Wollaston Station", icon: tico}));
+					redBranchBraintree.push(pt);
+				pt = new google.maps.LatLng(42.251809, -71.005409);
+				markers.push(new google.maps.Marker({position: pt, title: "Quincy Center Station", icon: tico}));
+					redBranchBraintree.push(pt);
+				pt = new google.maps.LatLng(42.29312583, -71.06573796);
+				markers.push(new google.maps.Marker({position: pt, title: "Shawmut Station", icon: tico}));
+					redBranchAshmont.push(pt);
+				pt = new google.maps.LatLng(42.233391, -71.007153);
+				markers.push(new google.maps.Marker({position: pt, title: "Quincy Adams Station", icon: tico}));
+					redBranchBraintree.push(pt);
+				pt = new google.maps.LatLng(42.284652, -71.064489);
+				markers.push(new google.maps.Marker({position: pt, title: "Ashmont Station", icon: tico}));
+					redBranchAshmont.push(pt);
+				pt = new google.maps.LatLng(42.2078543, -71.0011385);
+				markers.push(new google.maps.Marker({position: pt, title: "Braintree Station", icon: tico}));
+					redBranchBraintree.push(pt);
+
+				
+		// Render markers to map
+		for (var m in markers) {
+			markers[m].setMap(map);
+			google.maps.event.addListener(markers[m], 'click', function() {
+				stopName = this.title;
+				mvcObj = this;
+				jqxhr = $.ajax({
+						type: 'GET',
+						url: "/mapper/station_schedule_all.json?stop_name=" + stopName,
+						success: function(data) {
+							content = "<strong>" + stopName + "</strong>";
+							results = JSON.parse(jqxhr.responseText);
+							if (results.length > 0) {
+								content += '<table id="schedule"><tr><th>Line</th><th>Trip #</th><th>Direction</th><th>Time Remaining</th></tr>';
+								$.each(results, function() {
+									content += '<tr><td>' + this['line'] + '</td><td>' + this['trip'] + '</td><td>' + this['direction'] + '</td><td>' + this['time_remaining'] + '</td></tr>';
+								});
+								content += '</table>';
+							}
+							else {
+								content += "<p>No schedule of upcoming trains for this station.</p>";
+							}
+							infowindow.setContent(content);
+							
+							infowindow.open(map, mvcObj);
+						}
+					});
+			});
+		}
+			
+		// Render polylines (Red, Orange, and Blue)
+		redLine = new google.maps.Polyline({
+			path: redStations,
+			strokeColor: "#FF0000",
+			strokeOpacity: 1.0,
+			strokeWeight: 10
+		});
+		redLine.setMap(map);
+		redLineAshmont = new google.maps.Polyline({
+			path: redBranchAshmont,
+			strokeColor: "#FF0000",
+			strokeOpacity: 1.0,
+			strokeWeight: 10
+		});
+		redLineAshmont.setMap(map);
+		redLineBraintree = new google.maps.Polyline({
+			path: redBranchBraintree,
+			strokeColor: "#FF0000",
+			strokeOpacity: 1.0,
+			strokeWeight: 10
+		});
+		redLineBraintree.setMap(map);
+		orangeLine = new google.maps.Polyline({
+			path: orangeStations,
+			strokeColor: "#FF6600",
+			strokeOpacity: 1.0,
+			strokeWeight: 10
+		});
+		orangeLine.setMap(map);
+		blueLine = new google.maps.Polyline({
+			path: blueStations,
+			strokeColor: "#0000FF",
+			strokeOpacity: 1.0,
+			strokeWeight: 10
+		});
+		blueLine.setMap(map);
+		getMyLocation();
+	}
+	</script>
+</head>
+
+<body onload="init()"> 
+	<div id="map_canvas"></div>
+</body>
+
+</html>
