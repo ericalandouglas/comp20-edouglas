@@ -76,8 +76,7 @@ arrivals = {
 function init()
 {
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-	getMyLocation();	
-	//new google.maps.event.trigger( myMarker, 'click' );	
+	getMyLocation();		
 				
 }
 			
