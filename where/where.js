@@ -77,7 +77,7 @@ function init()
 {
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 	getMyLocation();	
-	new google.maps.event.trigger( marker, 'click' );	
+	//new google.maps.event.trigger( myMarker, 'click' );	
 				
 }
 			
@@ -112,7 +112,7 @@ function renderMap()
 	myMarker.setMap(map);
 
 	google.maps.event.addListener(myMarker, 'click', function() {
-		infowindow.setContent(myMarker.title + " , the nearest red line stop is " +closestTtitle+ ", "+ closestT + " miles away");
+		infowindow.setContent(myMarker.title + ", the nearest red line stop is " +closestTtitle+ ", "+ closestT + " miles away");
 		infowindow.open(map, myMarker);
 	});
 	
@@ -129,11 +129,13 @@ function plotWC() {
     	str = request.responseText;
         parsed = JSON.parse(str);
       	
-        if (parsed[0]['name'] == "Waldo") {
-			createWaldo(parsed, 0);			
-		}	 
-		if (parsed[0]['name'] == "Carmen Sandiego") {
-			createCarmen(parsed, 0);	
+        if (parsed.length >= 1) {
+			if (parsed[0]['name'] == "Waldo") {
+				createWaldo(parsed, 0);
+			}
+			else {
+				createCarmen(parsed, 0);
+			}
 		}
 		
 		if (parsed.length == 2) {
@@ -402,7 +404,6 @@ function plotTrainMarks () {
     parsed = JSON.parse(str);
     for (i = 0; i<parsed.length;i++) {
 		arrivals[parsed[i]['PlatformKey']].push(parsed[i]);
-		console.log(parsed[i]);
 	}
     
 		
