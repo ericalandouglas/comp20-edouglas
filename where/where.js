@@ -389,6 +389,14 @@ function populateLines() {
 
 }
 
+function sortTimes(a, b) {
+	var splita = a['TimeRemaining'].split(':');
+	var splitb = b['TimeRemaining'].split(':');
+	var aseconds = (+splita[0]) * 60 * 60 + (+splita[1]) * 60 + (+splita[2]);
+	var bseconds = (+splitb[0]) * 60 * 60 + (+splitb[1]) * 60 + (+splitb[2]);
+	return (aseconds - bseconds)
+}
+
 function plotTrainMarks () {
 
 	var lat1 = myLat; 
@@ -421,6 +429,8 @@ function plotTrainMarks () {
 				train = this;
 				var content = train.title;
 				if ((arrivals[train.id].length + arrivals[train.id2].length) > 0) {
+					arrivals[train.id].sort(sortTimes);
+					arrivals[train.id2].sort(sortTimes);
 					content += '<table id="schedule"><tr><th>Line</th><th>Trip #</th><th>Direction</th><th>Time Remaining</th></tr>';
 					for (var z = 0; z<arrivals[train.id].length; z++) {
 						if (arrivals[train.id][z]['TimeRemaining'].charAt(0) != '-') {
@@ -442,14 +452,9 @@ function plotTrainMarks () {
 				}
 				
 			infowindow.setContent(content);		
-			infowindow.open(map, train);
-			
-
-		});	
-
-		
+			infowindow.open(map, train);	
+		});		
 	}
-	
 }   
 	
 
