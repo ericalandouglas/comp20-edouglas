@@ -5,14 +5,13 @@
 <head>
 <title>Fecesbook</title>
 	<script type="text/javascript">
-	
 		function addupdate()
 		{
 			update = document.getElementById("msg").value;
 			date = new Date();
-			console.log(date.getMonth());
 			message = date.getMonth()+1 + "/" + date.getDate() + "/" + date.getFullYear() + " " 
 					+ date.getHours() + ":" + date.getMinutes() + " - " + update;
+			localStorage[new Date().getTime()] = message;
 			ulStats = document.getElementById("statuses");
 			if (ulStats == null) {
 				ulStats = document.createElement("ul");
@@ -25,11 +24,34 @@
 			li.appendChild(textBox);
 			ulStats.insertBefore(li, ulStats.firstChild);
 		}
+		
+		function reload() {
+			console.log(localStorage['high']);
+			ulStats = document.getElementById("statuses");
+			for (key in localStorage) {
+				console.log(localStorage[key]);
+				text = localStorage[key];
+				split = text.split("/");
+				if (split[2] != undefined) {
+					if (ulStats == null) {
+						ulStats = document.createElement("ul");
+						ulStats.id = "statuses";
+						divStats = document.getElementById("status");
+						divStats.appendChild(ulStats);
+					}
+					textBox = document.createTextNode(text);
+					li = document.createElement("li");
+					li.appendChild(textBox);
+					ulStats.insertBefore(li, ulStats.firstChild);
+				}
+			}
+			
+		}
 
 	</script>
 </head>
 
-<body>
+<body onload="reload()">
 	<h1>Fecebook</h1>
 	<div id="nav">
 		<ul>

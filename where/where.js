@@ -429,22 +429,28 @@ function plotTrainMarks () {
 				train = this;
 				var content = train.title;
 				if ((arrivals[train.id].length + arrivals[train.id2].length) > 0) {
+					arrivals[train.id].push.apply(arrivals[train.id], arrivals[train.id2]);
 					arrivals[train.id].sort(sortTimes);
-					arrivals[train.id2].sort(sortTimes);
 					content += '<table id="schedule"><tr><th>Line</th><th>Trip #</th><th>Direction</th><th>Time Remaining</th></tr>';
 					for (var z = 0; z<arrivals[train.id].length; z++) {
 						if (arrivals[train.id][z]['TimeRemaining'].charAt(0) != '-') {
-							content += '<tr><td>' + arrivals[train.id][z]['Line'] + '</td><td>' + arrivals[train.id][z]['Trip'] 
-										+ '</td><td>North</td><td>' + arrivals[train.id][z]['TimeRemaining'] + 
-										'</td></tr>';
+							content += '<tr><td>' + arrivals[train.id][z]['Line'] + '</td><td>' + arrivals[train.id][z]['Trip']
+										+ '</td><td>';
+										if (arrivals[train.id][z]['PlatformKey'].charAt(4) == 'S') {
+											content += 'South'
+										}
+										else {
+											content += 'North'
+										}
+										content += '</td><td>' + arrivals[train.id][z]['TimeRemaining'] + '</td></tr>';
 						}
 					}
-					for (var z = 0; z<arrivals[train.id2].length; z++) {
+					/*for (var z = 0; z<arrivals[train.id2].length; z++) {
 						if (arrivals[train.id2][z]['TimeRemaining'].charAt(0) != '-') {
 							content += '<tr><td>' + arrivals[train.id2][z]['Line'] + '</td><td>' + arrivals[train.id2][z]['Trip']
 										+ '</td><td>South</td><td>' + arrivals[train.id2][z]['TimeRemaining'] + '</td></tr>';
 						}
-					}
+					}*/
 					content += '</table>';
 				}
 				else {
