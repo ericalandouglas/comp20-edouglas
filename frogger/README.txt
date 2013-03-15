@@ -2,8 +2,15 @@ Eric Douglas
 Comp 20 Assignment 2: Frogger, Part 1
 2/13/2013
 
-I have correctly rendered all required images on the canvas. My code is structured in a way to allow for easy integration into part 2. I wrote an initializer function for the canvas as well as a redraw function that I will use later on in an animation function. I declared the game parameters I need for all these functions globally.
+I have correctly implemented all the basic requirements for the frogger game. Additionally I have also
+implemented the following extra features:
+1. I have implemented a timer, and the additional game scoring extra time feature.
+2. I animate frogger to the dead png when he dies
+3. I have added a fly that appears at random in the lily pads with proper score updates
+   on a successful collision with frogger.
+4. Minor updates include naive level progression (simple change of log/car speed and spawn rate), animated
+   frogger movements, and inclusion of turtles in the water as well.
 
 I have not collaborated with any one for this assignment.
 
-This assignment took me about 2 hours to complete.
+This assignment took me about 8 hours to complete.
