@@ -56,6 +56,8 @@ var frogger = {
 var fly_timer;
 var fly_sprite = {"ssheetx":135, "ssheety":232, "ssheetw":25, "ssheeth":20};
 var fly_active = false;
+var turtle_increment;
+var turtle_cd;
 
 var imgLoaded = false;
 var img = new Image();
@@ -83,6 +85,8 @@ game.initialize = function() {
 	time = 3150;
 	timer_width = (3/5)*399;
 	fly_timer = 750 + Math.floor(Math.random() * 200);
+	turtle_increment = 0;
+	turtle_cd = 40;
 	
 	if (localStorage['highscore'] == undefined) {
 		localStorage['highscore'] = 0;
@@ -109,13 +113,13 @@ game.initialize = function() {
 	car_specs[4] = {"yspawn" : 455, "ssheetx" : 80, "ssheety" : 265, "ssheetw" : 27, "ssheeth" : 26, "width" : 35, "height" : 32, 
 					"speed" : -1, "time" : 130, "xspawn" : 500, "spawn_count" : 0, "max_spawn" : 3, "timer" : 0}
 
-	log_specs[0] = {"yspawn" : 242, "ssheetx" : 12, "ssheety" : 401, "ssheetw" : 35, "ssheeth" : 27, "width" : 120, "height" : 37, 
+	log_specs[0] = {"yspawn" : 242, "ssheetx" : [12, 52, 85], "ssheety" : 401, "ssheetw" : 35, "ssheeth" : 27, "width" : 120, "height" : 37, 
 					"speed" : -1.75, "time" : 85, "xspawn" : 500, "spawn_count" : 0, "max_spawn" : 5, "timer" : 0}
 	log_specs[1] = {"yspawn" : 212, "ssheetx" : 5, "ssheety" : 227, "ssheetw" : 87, "ssheeth" : 27, "width" : 90, "height" : 37, 
 					"speed" : 1, "time" : 150, "xspawn" : -100, "spawn_count" : 0, "max_spawn" : 3, "timer" : 0}
 	log_specs[2] = {"yspawn" : 175, "ssheetx" : 5, "ssheety" : 161, "ssheetw" : 183, "ssheeth" : 27, "width" : 185, "height" : 37, 
 					"speed" : 2.25, "time" : 150, "xspawn" : -200, "spawn_count" : 0, "max_spawn" : 3, "timer" : 0}
-	log_specs[3] = {"yspawn" : 140, "ssheetx" : 12, "ssheety" : 401, "ssheetw" : 35, "ssheeth" : 27, "width" : 90, "height" : 37, 
+	log_specs[3] = {"yspawn" : 140, "ssheetx" : [12, 52, 85], "ssheety" : 401, "ssheetw" : 35, "ssheeth" : 27, "width" : 90, "height" : 37, 
 					"speed" : -1.75, "time" : 80, "xspawn" : 500, "spawn_count" : 0, "max_spawn" : 4, "timer" : 0}
 	log_specs[4] = {"yspawn" : 104, "ssheetx" : 5, "ssheety" : 192, "ssheetw" : 119, "ssheeth" : 27, "width" : 120, "height" : 37, 
 					"speed" : 1.75, "time" : 100, "xspawn" : -150, "spawn_count" : 0, "max_spawn" : 4, "timer" : 0}
@@ -215,25 +219,36 @@ game.draw = function ()
     			//ctx.strokeRect(cars[m].xpos,cars[m].ypos,cars[m].width,cars[m].height);
     		}
     		//Logs
+    		console.log(turtle_increment);
     		for (var m in logs) {
     			if (logs[m].ypos == 140) {
-    				ctx.drawImage(img,logs[m].ssheetx,logs[m].ssheety,logs[m].ssheetw,logs[m].ssheeth,logs[m].xpos,
+    				ctx.drawImage(img,logs[m].ssheetx[turtle_increment],logs[m].ssheety,logs[m].ssheetw,logs[m].ssheeth,logs[m].xpos,
     						  logs[m].ypos,logs[m].width/2,logs[m].height);
-    				ctx.drawImage(img,logs[m].ssheetx,logs[m].ssheety,logs[m].ssheetw,logs[m].ssheeth,logs[m].xpos+logs[m].width/2,
-    						  logs[m].ypos,logs[m].width/2,logs[m].height);
+    				ctx.drawImage(img,logs[m].ssheetx[turtle_increment],logs[m].ssheety,logs[m].ssheetw,logs[m].ssheeth,
+    							logs[m].xpos+logs[m].width/2, logs[m].ypos,logs[m].width/2,logs[m].height);
     			}
     			else if (logs[m].ypos == 242) {
-    				ctx.drawImage(img,logs[m].ssheetx,logs[m].ssheety,logs[m].ssheetw,logs[m].ssheeth,logs[m].xpos,
+    				ctx.drawImage(img,logs[m].ssheetx[turtle_increment],logs[m].ssheety,logs[m].ssheetw,logs[m].ssheeth,logs[m].xpos,
     						  logs[m].ypos,logs[m].width/3,logs[m].height);
-    				ctx.drawImage(img,logs[m].ssheetx,logs[m].ssheety,logs[m].ssheetw,logs[m].ssheeth,logs[m].xpos+logs[m].width/3,
-    						  logs[m].ypos,logs[m].width/3,logs[m].height);
-    				ctx.drawImage(img,logs[m].ssheetx,logs[m].ssheety,logs[m].ssheetw,logs[m].ssheeth,logs[m].xpos+(2*logs[m].width/3),
-    						  logs[m].ypos,logs[m].width/3,logs[m].height);
+    				ctx.drawImage(img,logs[m].ssheetx[turtle_increment],logs[m].ssheety,logs[m].ssheetw,logs[m].ssheeth,
+    						logs[m].xpos+logs[m].width/3, logs[m].ypos,logs[m].width/3,logs[m].height);
+    				ctx.drawImage(img,logs[m].ssheetx[turtle_increment],logs[m].ssheety,logs[m].ssheetw,logs[m].ssheeth,
+    						logs[m].xpos+(2*logs[m].width/3),logs[m].ypos,logs[m].width/3,logs[m].height);
     			}
     			else {
     				ctx.drawImage(img,logs[m].ssheetx,logs[m].ssheety,logs[m].ssheetw,logs[m].ssheeth,logs[m].xpos,
     						  logs[m].ypos,logs[m].width,logs[m].height);
     			}
+    		}
+    		turtle_cd--;
+    		if (turtle_cd < 0) {
+    			if (turtle_increment == 2) {
+    				turtle_increment = 0;
+    			}
+    			else {
+    				turtle_increment++;
+    			}
+    			turtle_cd = 40;
     		}
     		//Frogger
     		if (frogger.orientation != "dead" && !frogger.dead) {
