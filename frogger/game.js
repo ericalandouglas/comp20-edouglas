@@ -58,6 +58,8 @@ var fly_sprite = {"ssheetx":135, "ssheety":232, "ssheetw":25, "ssheeth":20};
 var fly_active = false;
 var turtle_increment;
 var turtle_cd;
+var dozer_increment;
+var dozer_cd;
 
 var imgLoaded = false;
 var img = new Image();
@@ -87,6 +89,8 @@ game.initialize = function() {
 	fly_timer = 750 + Math.floor(Math.random() * 200);
 	turtle_increment = 0;
 	turtle_cd = 40;
+	dozer_increment = 0;
+	dozer_cd = 15;
 	
 	if (localStorage['highscore'] == undefined) {
 		localStorage['highscore'] = 0;
@@ -108,7 +112,7 @@ game.initialize = function() {
 					"speed" : 1.75, "time" : 80, "xspawn" : -100, "spawn_count" : 0, "max_spawn" : 3, "timer" : 120}
 	car_specs[2] = {"yspawn" : 385, "ssheetx" : 8, "ssheety" : 265, "ssheetw" : 30, "ssheeth" : 21, "width" : 35, "height" : 30, 
 					"speed" : -1.75, "time" : 80, "xspawn" : 500, "spawn_count" : 0, "max_spawn" : 3, "timer" : 0}
-	car_specs[3] = {"yspawn" : 417, "ssheetx" : 9, "ssheety" : 296, "ssheetw" : 28, "ssheeth" : 25, "width" : 35, "height" : 33, 
+	car_specs[3] = {"yspawn" : 417, "ssheetx" : [9, 39, 70], "ssheety" : 296, "ssheetw" : 28, "ssheeth" : 25, "width" : 35, "height" : 33, 
 					"speed" : 1.75, "time" : 80, "xspawn" : -100, "spawn_count" : 0, "max_spawn" : 3, "timer" : 0}
 	car_specs[4] = {"yspawn" : 455, "ssheetx" : 80, "ssheety" : 265, "ssheetw" : 27, "ssheeth" : 26, "width" : 35, "height" : 32, 
 					"speed" : -1, "time" : 130, "xspawn" : 500, "spawn_count" : 0, "max_spawn" : 3, "timer" : 0}
@@ -136,6 +140,30 @@ game.initialize = function() {
 				  has_fly : false};
 
 };
+
+function update_anims() {
+	turtle_cd--;
+    if (turtle_cd < 0) {
+    	if (turtle_increment == 2) {
+    		turtle_increment = 0;
+    	}
+    	else {
+    		turtle_increment++;
+    	}
+    	turtle_cd = 40;
+    }
+    dozer_cd--;
+    if (dozer_cd < 0) {
+    	if (dozer_increment == 2) {
+    		dozer_increment = 0;
+    	}
+    	else {
+    		dozer_increment++;
+    	}
+    	dozer_cd = 15;
+    }
+
+}
 
 
 game.draw = function () 
@@ -214,12 +242,17 @@ game.draw = function ()
 			//Cars
 			ctx.strokeStyle = "#FF0000";
     		for (var m in cars) {
-    			ctx.drawImage(img,cars[m].ssheetx,cars[m].ssheety,cars[m].ssheetw,cars[m].ssheeth,cars[m].xpos,
+    			if (cars[m].ypos == 417) {
+    				ctx.drawImage(img,cars[m].ssheetx[dozer_increment],cars[m].ssheety,cars[m].ssheetw,cars[m].ssheeth,cars[m].xpos,
     						  cars[m].ypos,cars[m].width,cars[m].height);
+    			}
+    			else {
+    				ctx.drawImage(img,cars[m].ssheetx,cars[m].ssheety,cars[m].ssheetw,cars[m].ssheeth,cars[m].xpos,
+    						  cars[m].ypos,cars[m].width,cars[m].height);
+    			}
     			//ctx.strokeRect(cars[m].xpos,cars[m].ypos,cars[m].width,cars[m].height);
     		}
     		//Logs
-    		console.log(turtle_increment);
     		for (var m in logs) {
     			if (logs[m].ypos == 140) {
     				ctx.drawImage(img,logs[m].ssheetx[turtle_increment],logs[m].ssheety,logs[m].ssheetw,logs[m].ssheeth,logs[m].xpos,
@@ -240,16 +273,7 @@ game.draw = function ()
     						  logs[m].ypos,logs[m].width,logs[m].height);
     			}
     		}
-    		turtle_cd--;
-    		if (turtle_cd < 0) {
-    			if (turtle_increment == 2) {
-    				turtle_increment = 0;
-    			}
-    			else {
-    				turtle_increment++;
-    			}
-    			turtle_cd = 40;
-    		}
+    		update_anims();
     		//Frogger
     		if (frogger.orientation != "dead" && !frogger.dead) {
     			if (frogger.cooldown < 0) {
