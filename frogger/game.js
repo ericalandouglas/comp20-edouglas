@@ -735,3 +735,11 @@ function start_Game() {
 			game.initialize();
             game._intervalID = setInterval(game.run, 0);
 }
+
+
+function submit_score(){
+	var username = 'test';
+	
+	$.post("http://quiet-coast-3990.herokuapp.com/submit.json", 
+			{game_title: "Frogger", username: username, score: score});
+}
