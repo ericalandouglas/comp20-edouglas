@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<link rel="stylesheet" href="report.css"/>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<title>Security Report</title>
+</head>
+
+<body>
+	<h1 class="name">Eric Douglas</h1>
+	<h1>Security Report for Steve Lessard</h1>
+	<div id="intro">
+		<h2>Introduction</h2>
+		<p>This report looks at a simple web application built using heroku and express.</br>
+		   The web application is connected to a database that allows users to record scores,</br>
+		   search for user scores, or view the top 10 scores for a given gam in JSON format.</br>
+		   It is my job to find any and all security flaws related to the web application and</br>
+		   provide details about what was found, where it was found, what implications</br>
+		   may result from the flaws, and how I would resolve the issues found.
+		</p>
+	</div>
+	<div id="method">
+		<h2>Methodology</h2>
+		<p>
+		   To test for security flaws in this web application I will start with basic black box attacks.</br>
+		   I will attempt to perform a script injection, and potentially a mongodb injection. After I complete</br>
+		   basic black box attacks I will look at the source code for any further glaring security flaws.</br>
+		   After inspecting the source code if I feel more security assessment is necessary I will use a proxy</br>
+		   to tamper with user data, the web app's requests, and inspect request information and data.
+		</p>
+	</div>
+	<div id="findings">
+		<h2>Abstract Findings</h2>
+		<p>
+		   The major issue found on the web application was a lack of input checking/sanitization. User input</br>
+		   is not sanitized or even reviewed allowing the possibility of script injection that can cause annoying</br>
+		   behavior, unwanted redirects, and even render the functionality of the site useless while also giving way</br>
+		   to the possibility of cross site scripting. Valuable and private information pertaining to the web app</br>
+		   is viewable by any client in the source code when only such restricted data should be viewable and accessed</br>
+		   by the admin and developers of the website to ensure the web application and its resources are not tampered</br>
+		   with. The rest of the app was analyzed closely but due to its incompleteness no other real issues could be</br> 
+		   recognized or analyzed.
+		   
+		</p>
+	</div>
+	<div id="issues">
+		<h2>Issues Found</h2>
+		<ol>
+			<li><span class="issue">No submit input validation</span></li>
+				<ul>
+					<li><span class="bullet">Issue</span> - The application does not sanitize user input and more specifically does not remove &lt or &gt </br>
+					    allowing users to inject scripts using the script tag.</li>
+					<li><span class="bullet">Location</span> - The scripts are injected directly to the root directory of the web application at '/'.</li>
+					<li><span class="bullet">Severity</span> - HIGH, any user can cause severe website functionality issues and potentially harm other clients</li>
+					<li><span class="bullet">Description</span> - The web app allows users to post scores to the /submit.json API. The web app accepts all</br>
+					    submissions universally. Therefore any user can post any content they like. Scripts and other harmful malware</br>
+					    can be injected via &ltscript&gt.</li>
+					<li><span class="bullet">Resolution</span> - The easiest way to remove potentially harmful scripts from user input is to sanitize any and all</br>
+					    tags that appear in user input by replacing &lt and &gt with & lt and & gt eliminating the possibility of any</br>
+					    tags appearing in user input rendering scipt injection useless. It is also possible top create a white list</br>
+					    to handle post requests and block any unwanted clients.</li>
+				</ul>
+			</li>
+			<li><span class="issue">Exposure of private data</span></li>
+				<ul>
+					<li><span class="bullet">Issue</span> - The application hardcodes things such as the mongodb uri into source code making such information</br> 
+					viewable by any and all clients. A mongodb username and password is also visible.</li>
+					<li><span class="bullet">Location</span> - This security flaw is found in the source code in the web.js file. There such information as the</br>
+					mongodb uri is visible.</li>
+					<li><span class="bullet">Severity</span> - HIGH, any user can view what should be private information so they can not access or tamper with</br>
+					the applications resources (such as a database) and other internal data.</li>
+					<li><span class="bullet">Description</span> - By allowing the user to view a mongodb uri or other restricted information, any client can</br>
+					render the database as well as other resources and the web apps functionality useless. This information</br>
+					should be kept private so only a select few have access to the web app's resources.</li>
+					<li><span class="bullet">Resolution</span> - Obviously to resolve this issue it is necessary to encode all private data thereby hiding</br>
+					its visibility from clients who use the web application. This will ensure that no client can tamper with the</br>
+					website's data and resources and potentially harm the application.</li>
+				</ul>
+			</li>
+		</ol>
+	</div>
+	<div id="conclusion">
+		<h2>Conclusion</h2>
+		<p>
+		   It is clear that no thought went into security measures for this web application. It was not hard to inject scripts and</br>
+		   was done successfully after a few minor black box attempts. Upon further review of the source code it was clear that the</br>
+		   site was very exposed to attacks and hackers. Fortunately some of the severe security issues like script injection can be</br>
+		   easily taken care of with a little extra work on the site. If further assistance is needed to resolve these issues please</br>
+		   contact me directly and I will be glad to work through the exact measures that should be taken.
+		</p>
+	</div>
+</body>
+
+</html>

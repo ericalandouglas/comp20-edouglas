@@ -1,0 +1,40 @@
+body {
+    font-family: 'Bariol', Helvetica, Arial, serif;
+    font-size: small; /* You can use px here too! */
+    color: grey;
+    background-color: #FFE4C4;
+}
+
+h1 {
+	font-size: xx-large;
+	font-family: "Copperplate Gothic Bold", serif;
+	font-style: italic;
+	color: #FF4500;
+	position: relative;
+    bottom: 0;
+    right: -150px;
+}
+
+.bullet {
+	font-weight:bold;
+	text-decoration:underline;
+}
+
+.name {
+	left: 350px;
+}
+
+h2 {
+	color: #FF4500;
+	
+}
+
+.issue {
+	font-size: medium;
+	font-weight: bold;
+}
+
+p {
+	position: relative;
+	left: 25px;
+}
